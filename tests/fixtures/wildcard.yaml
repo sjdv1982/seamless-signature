@@ -1,0 +1,12 @@
+function_name: matvec
+inputs:
+  - name: matrix
+    dtype: float32
+    shape: [Rows, Cols]
+  - name: vector
+    dtype: float32
+    shape: [Cols]
+outputs:
+  - name: result
+    dtype: float32
+    shape: [Rows]

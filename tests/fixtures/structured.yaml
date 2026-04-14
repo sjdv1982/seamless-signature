@@ -1,0 +1,17 @@
+function_name: residues
+inputs:
+  - name: residues
+    dtype:
+      fields:
+        - name: resname
+          dtype: char
+          shape: [4]
+        - name: pos
+          dtype: float32
+          shape: [3]
+        - name: mass
+          dtype: float32
+    shape: [X, Y]
+outputs:
+  - name: result
+    dtype: float64

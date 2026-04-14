@@ -1,0 +1,11 @@
+function_name: normalize
+inputs:
+  - name: values
+    dtype: float32
+    shape: [N, 3]
+outputs:
+  - name: normalized
+    dtype: float32
+    shape: [N, 3]
+  - name: norm
+    dtype: float64

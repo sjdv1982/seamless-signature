@@ -1,0 +1,13 @@
+function_name: rmsd
+inputs:
+  - name: coords1
+    dtype: float32
+    shape: [X, Y, 3]
+  - name: coords2
+    dtype: float32
+    shape: [X, Y, 3]
+  - name: weight
+    dtype: float64
+outputs:
+  - name: result
+    dtype: float64
