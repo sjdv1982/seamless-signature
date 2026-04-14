@@ -92,6 +92,8 @@ class Signature:
         for parameter in self.inputs + self.outputs:
             if not isinstance(parameter, Parameter):
                 raise TypeError("Signature inputs and outputs must contain Parameter instances")
+        if set(self.input_wildcards) & set(self.output_wildcards):
+            raise TypeError("Wildcard dimensions cannot be both input-derived and output-only")
 
     @property
     def wildcard_names(self) -> tuple[str, ...]:
@@ -99,6 +101,20 @@ class Signature:
         for parameter in self.inputs + self.outputs:
             for dim in parameter.wildcard_dims:
                 if dim not in names:
+                    names.append(dim)
+        return tuple(names)
+
+    @property
+    def input_wildcards(self) -> tuple[str, ...]:
+        return _unique_wildcards(self.inputs)
+
+    @property
+    def output_wildcards(self) -> tuple[str, ...]:
+        input_wildcards = set(self.input_wildcards)
+        names = []
+        for parameter in self.outputs:
+            for dim in parameter.wildcard_dims:
+                if dim not in input_wildcards and dim not in names:
                     names.append(dim)
         return tuple(names)
 
@@ -134,3 +150,12 @@ def _parse_parameter_shape(shape: Any, parameter_name: str) -> tuple[ShapeDim, .
 
 def _is_positive_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool) and value > 0
+
+
+def _unique_wildcards(parameters: list[Parameter]) -> tuple[str, ...]:
+    names = []
+    for parameter in parameters:
+        for dim in parameter.wildcard_dims:
+            if dim not in names:
+                names.append(dim)
+    return tuple(names)

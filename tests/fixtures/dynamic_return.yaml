@@ -1,0 +1,14 @@
+function_name: find_peaks
+inputs:
+  - name: signal
+    dtype: float32
+    shape: [N]
+  - name: threshold
+    dtype: float32
+outputs:
+  - name: peak_positions
+    dtype: int32
+    shape: [K]
+  - name: peak_values
+    dtype: float32
+    shape: [K]

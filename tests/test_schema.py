@@ -11,7 +11,17 @@ from seamless_signature.schema import Signature
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-@pytest.mark.parametrize("fixture", ["simple.yaml", "wildcard.yaml", "structured.yaml", "outputs.yaml"])
+@pytest.mark.parametrize(
+    "fixture",
+    [
+        "simple.yaml",
+        "wildcard.yaml",
+        "structured.yaml",
+        "outputs.yaml",
+        "static_return.yaml",
+        "dynamic_return.yaml",
+    ],
+)
 def test_load_signature_fixtures(fixture: str) -> None:
     sig = load_signature(FIXTURES / fixture)
 
@@ -33,9 +43,44 @@ def test_wildcards_are_deduplicated_in_first_seen_order() -> None:
     sig = load_signature(FIXTURES / "wildcard.yaml")
 
     assert sig.wildcard_names == ("Rows", "Cols")
+    assert sig.input_wildcards == ("Rows", "Cols")
+    assert sig.output_wildcards == ()
     assert sig.inputs[0].wildcard_dims == ("Rows", "Cols")
     assert sig.inputs[1].wildcard_dims == ("Cols",)
     assert sig.outputs[0].wildcard_dims == ("Rows",)
+
+
+def test_static_return_reuses_input_wildcard() -> None:
+    sig = load_signature(FIXTURES / "static_return.yaml")
+
+    assert sig.wildcard_names == ("N",)
+    assert sig.input_wildcards == ("N",)
+    assert sig.output_wildcards == ()
+
+
+def test_dynamic_return_classifies_output_only_wildcard() -> None:
+    sig = load_signature(FIXTURES / "dynamic_return.yaml")
+
+    assert sig.wildcard_names == ("N", "K")
+    assert sig.input_wildcards == ("N",)
+    assert sig.output_wildcards == ("K",)
+
+
+def test_output_wildcards_are_deduplicated_in_first_seen_order() -> None:
+    sig = Signature.from_dict(
+        {
+            "function_name": "multi_dynamic",
+            "inputs": [{"name": "values", "dtype": "float32", "shape": ["N"]}],
+            "outputs": [
+                {"name": "first", "dtype": "float32", "shape": ["K", "L"]},
+                {"name": "second", "dtype": "float32", "shape": ["L"]},
+                {"name": "third", "dtype": "float32", "shape": ["N", "K"]},
+            ],
+        }
+    )
+
+    assert sig.input_wildcards == ("N",)
+    assert sig.output_wildcards == ("K", "L")
 
 
 def test_structured_dtype_fields() -> None:

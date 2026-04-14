@@ -42,9 +42,17 @@ def generate_header(sig: Signature) -> str:
                 )
 
     args = []
-    args.extend(f"unsigned int {name}" for name in sig.wildcard_names)
-    args.extend(_parameter_arg(parameter, const_array=True, struct_names=struct_names) for parameter in sig.inputs)
-    args.extend(_parameter_arg(parameter, const_array=False, struct_names=struct_names) for parameter in sig.outputs)
+    args.extend(f"unsigned int {name}" for name in sig.input_wildcards)
+    args.extend(f"unsigned int max{name}" for name in sig.output_wildcards)
+    args.extend(
+        _parameter_arg(parameter, const_array=True, struct_names=struct_names)
+        for parameter in sig.inputs
+    )
+    args.extend(f"unsigned int *{name}" for name in sig.output_wildcards)
+    args.extend(
+        _parameter_arg(parameter, const_array=False, struct_names=struct_names)
+        for parameter in sig.outputs
+    )
 
     lines = [
         f"/* Auto-generated from {sig.function_name}.yaml; do not edit. */",

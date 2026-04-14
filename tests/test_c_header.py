@@ -20,6 +20,8 @@ FIXTURES = Path(__file__).parent / "fixtures"
         ("wildcard.yaml", "wildcard.h"),
         ("structured.yaml", "structured.h"),
         ("outputs.yaml", "outputs.h"),
+        ("static_return.yaml", "static_return.h"),
+        ("dynamic_return.yaml", "dynamic_return.h"),
     ],
 )
 def test_generate_header_matches_golden(fixture: str, golden: str) -> None:
@@ -69,7 +71,17 @@ def test_structured_array_fixed_element_shape_gets_typedef() -> None:
 
 
 @pytest.mark.skipif(shutil.which("gcc") is None, reason="gcc is not available")
-@pytest.mark.parametrize("fixture", ["simple.yaml", "wildcard.yaml", "structured.yaml", "outputs.yaml"])
+@pytest.mark.parametrize(
+    "fixture",
+    [
+        "simple.yaml",
+        "wildcard.yaml",
+        "structured.yaml",
+        "outputs.yaml",
+        "static_return.yaml",
+        "dynamic_return.yaml",
+    ],
+)
 def test_generated_header_is_valid_c(fixture: str) -> None:
     sig = load_signature(FIXTURES / fixture)
     header = generate_header(sig)

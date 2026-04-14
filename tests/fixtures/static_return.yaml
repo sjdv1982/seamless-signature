@@ -1,0 +1,9 @@
+function_name: pairwise_distance
+inputs:
+  - name: coords
+    dtype: float32
+    shape: [N, 3]
+outputs:
+  - name: dist
+    dtype: float32
+    shape: [N, N]
