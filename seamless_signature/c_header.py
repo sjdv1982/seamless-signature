@@ -55,7 +55,6 @@ def generate_header(sig: Signature) -> str:
     )
 
     lines = [
-        f"/* Auto-generated from {sig.function_name}.yaml; do not edit. */",
         "#include <stdint.h>",
         "#include <stdbool.h>",
         "",

@@ -25,7 +25,6 @@ FIXTURES = Path(__file__).parent / "fixtures"
 def test_load_signature_fixtures(fixture: str) -> None:
     sig = load_signature(FIXTURES / fixture)
 
-    assert sig.function_name
     assert all(parameter.name for parameter in sig.inputs + sig.outputs)
 
 
@@ -69,7 +68,6 @@ def test_dynamic_return_classifies_output_only_wildcard() -> None:
 def test_output_wildcards_are_deduplicated_in_first_seen_order() -> None:
     sig = Signature.from_dict(
         {
-            "function_name": "multi_dynamic",
             "inputs": [{"name": "values", "dtype": "float32", "shape": ["N"]}],
             "outputs": [
                 {"name": "first", "dtype": "float32", "shape": ["K", "L"]},
@@ -106,7 +104,7 @@ def test_fixed_dimension_before_wildcard_rejected(shape: list[int | str]) -> Non
     with pytest.raises(TypeError, match="fixed dimensions before wildcard"):
         Signature.from_dict(
             {
-                "function_name": "bad",
+    
                 "inputs": [{"name": "arr", "dtype": "float32", "shape": shape}],
                 "outputs": [],
             }
@@ -117,7 +115,7 @@ def test_empty_parameter_shape_rejected() -> None:
     with pytest.raises(TypeError, match="must not be empty"):
         Signature.from_dict(
             {
-                "function_name": "bad",
+    
                 "inputs": [{"name": "arr", "dtype": "float32", "shape": []}],
                 "outputs": [],
             }
@@ -128,7 +126,7 @@ def test_wildcard_inside_struct_field_rejected() -> None:
     with pytest.raises(TypeError, match="shape entries must be positive integers"):
         Signature.from_dict(
             {
-                "function_name": "bad",
+    
                 "inputs": [
                     {
                         "name": "arr",
@@ -149,7 +147,7 @@ def test_unknown_scalar_dtype_rejected() -> None:
     with pytest.raises(TypeError, match="Unknown scalar dtype"):
         Signature.from_dict(
             {
-                "function_name": "bad",
+    
                 "inputs": [{"name": "x", "dtype": "float16"}],
                 "outputs": [],
             }

@@ -40,7 +40,6 @@ def test_scalar_array_typedefs_are_deduplicated() -> None:
 def test_structured_array_fixed_element_shape_gets_typedef() -> None:
     sig = Signature.from_dict(
         {
-            "function_name": "struct_blocks",
             "inputs": [
                 {
                     "name": "records",

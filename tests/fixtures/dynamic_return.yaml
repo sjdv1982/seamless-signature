@@ -1,4 +1,3 @@
-function_name: find_peaks
 inputs:
   - name: signal
     dtype: float32

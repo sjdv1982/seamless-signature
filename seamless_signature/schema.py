@@ -76,15 +76,10 @@ class Parameter:
 
 @dataclass(frozen=True)
 class Signature:
-    function_name: str
     inputs: list[Parameter]
     outputs: list[Parameter]
 
     def __post_init__(self) -> None:
-        if not isinstance(self.function_name, str) or not IDENTIFIER_RE.match(self.function_name):
-            raise TypeError(
-                f"Function name must be a valid C identifier: {self.function_name!r}"
-            )
         if not isinstance(self.inputs, list):
             raise TypeError("'inputs' must be a list")
         if not isinstance(self.outputs, list):
@@ -122,11 +117,9 @@ class Signature:
     def from_dict(cls, d: dict[str, Any]) -> "Signature":
         if not isinstance(d, dict):
             raise TypeError("Signature document must be a mapping")
-        unknown = set(d) - {"function_name", "inputs", "outputs"}
+        unknown = set(d) - {"inputs", "outputs"}
         if unknown:
             raise TypeError(f"Unknown signature keys: {sorted(unknown)!r}")
-        if "function_name" not in d:
-            raise TypeError("Signature is missing required key 'function_name'")
         inputs = d.get("inputs", [])
         outputs = d.get("outputs", [])
         if not isinstance(inputs, list):
@@ -134,7 +127,6 @@ class Signature:
         if not isinstance(outputs, list):
             raise TypeError("'outputs' must be a list")
         return cls(
-            function_name=d["function_name"],
             inputs=[Parameter.from_dict(parameter) for parameter in inputs],
             outputs=[Parameter.from_dict(parameter) for parameter in outputs],
         )

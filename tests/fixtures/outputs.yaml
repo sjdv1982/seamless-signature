@@ -1,4 +1,3 @@
-function_name: normalize
 inputs:
   - name: values
     dtype: float32

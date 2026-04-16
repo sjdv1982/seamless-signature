@@ -1,4 +1,3 @@
-function_name: residues
 inputs:
   - name: residues
     dtype:

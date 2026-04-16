@@ -1,4 +1,3 @@
-function_name: matvec
 inputs:
   - name: matrix
     dtype: float32

@@ -1,4 +1,3 @@
-function_name: pairwise_distance
 inputs:
   - name: coords
     dtype: float32

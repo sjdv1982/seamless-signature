@@ -1,4 +1,3 @@
-/* Auto-generated from matvec.yaml; do not edit. */
 #include <stdint.h>
 #include <stdbool.h>
 
