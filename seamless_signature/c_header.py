@@ -18,9 +18,9 @@ SCALAR_C_TYPES = {
     "float32": "float",
     "float64": "double",
     "bool": "bool",
-    "char": "char",
-    "complex64": "_Complex float",
-    "complex128": "_Complex double",
+    "char": "unsigned char",
+    "complex64": "float _Complex",
+    "complex128": "double _Complex",
 }
 
 

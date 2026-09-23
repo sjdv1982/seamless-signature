@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 typedef struct {
-    char resname[4];
+    unsigned char resname[4];
     float pos[3];
     float mass;
 } ResiduesStruct;
